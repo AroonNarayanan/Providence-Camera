@@ -4,11 +4,11 @@ import android.content.ComponentName
 import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -48,36 +48,49 @@ class FrontCamera : AppCompatActivity() {
                 }.also {
                     startForegroundService(it)
                 }
-            }, bgDelay)
+            }, instaDelay)
         }
 
         //Play Video
         val videoUri = prefs.getString("video", "")
+        Log.e("VIDEO", videoUri)
         if (videoUri != null && videoUri != "") {
-            val mediaMetadataReceiver = MediaMetadataRetriever().also {
-                it.setDataSource(this, Uri.parse(videoUri))
-            }
-            val videoView = findViewById<VideoView>(R.id.video)
-            videoView.setVideoURI(Uri.parse(videoUri))
-            videoView.start()
-            findViewById<ImageButton>(R.id.frontshutter).setOnClickListener {
-                val frame =
-                    mediaMetadataReceiver.getFrameAtTime(videoView.currentPosition.toLong() * 1000)
-                findViewById<ImageView>(R.id.framepreview).setImageBitmap(frame)
-                findViewById<ImageView>(R.id.framepreview).visibility = View.VISIBLE
-                MediaStore.Images.Media.insertImage(
-                    contentResolver,
-                    frame,
-                    Calendar.getInstance().timeInMillis.toString() + ".jpg",
-                    Calendar.getInstance().timeInMillis.toString() + ".jpg"
-                )
-                android.os.Handler(Looper.getMainLooper()).postDelayed({
-                    findViewById<ImageView>(R.id.framepreview).visibility = View.GONE
-                }, 200)
+            try {
+                val mediaMetadataReceiver = MediaMetadataRetriever().also {
+                    it.setDataSource(this, Uri.parse(videoUri))
+                }
+                val videoView = findViewById<VideoView>(R.id.video)
+                videoView.setVideoURI(Uri.parse(videoUri))
+                videoView.start()
+                findViewById<ImageButton>(R.id.frontshutter).setOnClickListener {
+                    val frame =
+                        mediaMetadataReceiver.getFrameAtTime(videoView.currentPosition.toLong() * 1000)
+                    findViewById<ImageView>(R.id.framepreview).setImageBitmap(frame)
+                    findViewById<ImageView>(R.id.framepreview).visibility = View.VISIBLE
+                    val imagePath = MediaStore.Images.Media.insertImage(
+                        contentResolver,
+                        frame,
+                        Calendar.getInstance().timeInMillis.toString() + ".jpg",
+                        Calendar.getInstance().timeInMillis.toString() + ".jpg"
+                    )
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+                        findViewById<ImageView>(R.id.framepreview).visibility = View.GONE
+                    }, 200)
+                    Intent().apply {
+                        component =
+                            ComponentName("com.sorrytale.gallery", "com.sorrytale.gallery.SetPhoto")
+                        action = "com.sorrytale.gallery.action.SET"
+                        putExtra("image", imagePath)
+                    }.also {
+                        startForegroundService(it)
+                    }
+                }
+            } catch (ex: Exception) {
             }
         }
 
 
+        // Button listeners
         findViewById<ImageButton>(R.id.frontflip).setOnClickListener {
             Intent(this, CameraSettings::class.java).also {
                 startActivity(it)

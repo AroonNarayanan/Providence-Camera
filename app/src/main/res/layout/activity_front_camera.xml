@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:id="@+id/framepreview"
         android:visibility="gone" />
 
