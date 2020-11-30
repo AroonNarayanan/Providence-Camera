@@ -91,9 +91,48 @@ class FrontCamera : AppCompatActivity() {
 
 
         // Button listeners
-        findViewById<ImageButton>(R.id.frontflip).setOnClickListener {
+        findViewById<ImageButton>(R.id.frontgallery).setOnClickListener {
             Intent(this, CameraSettings::class.java).also {
                 startActivity(it)
+            }
+        }
+
+        findViewById<ImageButton>(R.id.frontflip).setOnClickListener {
+            val videoUri2 = prefs.getString("video2", "")
+            Log.e("VIDEO", videoUri2)
+            if (videoUri2 != null && videoUri2 != "") {
+                try {
+//                    val mediaMetadataReceiver = MediaMetadataRetriever().also {
+//                        it.setDataSource(this, Uri.parse(videoUri2))
+//                    }
+                    val videoView = findViewById<VideoView>(R.id.video)
+                    videoView.setVideoURI(Uri.parse(videoUri2))
+                    videoView.start()
+//                    findViewById<ImageButton>(R.id.frontshutter).setOnClickListener {
+//                        val frame =
+//                            mediaMetadataReceiver.getFrameAtTime(videoView.currentPosition.toLong() * 1000)
+//                        findViewById<ImageView>(R.id.framepreview).setImageBitmap(frame)
+//                        findViewById<ImageView>(R.id.framepreview).visibility = View.VISIBLE
+//                        val imagePath = MediaStore.Images.Media.insertImage(
+//                            contentResolver,
+//                            frame,
+//                            Calendar.getInstance().timeInMillis.toString() + ".jpg",
+//                            Calendar.getInstance().timeInMillis.toString() + ".jpg"
+//                        )
+//                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+//                            findViewById<ImageView>(R.id.framepreview).visibility = View.GONE
+//                        }, 200)
+//                        Intent().apply {
+//                            component =
+//                                ComponentName("com.sorrytale.gallery", "com.sorrytale.gallery.SetPhoto")
+//                            action = "com.sorrytale.gallery.action.SET"
+//                            putExtra("image", imagePath)
+//                        }.also {
+//                            startForegroundService(it)
+//                        }
+//                    }
+                } catch (ex: Exception) {
+                }
             }
         }
     }

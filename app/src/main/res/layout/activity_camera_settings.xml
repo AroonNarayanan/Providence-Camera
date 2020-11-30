@@ -14,19 +14,27 @@
         android:layout_height="wrap_content"
         android:text="Pick Video" />
 
+    <Button
+        android:id="@+id/pickvideo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Video 2" />
+
     <EditText
         android:id="@+id/bgDelay"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:hint="Brain Game Delay"
         android:layout_marginTop="20dp"
+        android:hint="Brain Game Delay"
         android:inputType="number" />
+
     <CheckBox
         android:id="@+id/bgEnabled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enabled"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:text="Enabled" />
+
     <Button
         android:id="@+id/bgSave"
         android:layout_width="wrap_content"
@@ -38,15 +46,17 @@
         android:id="@+id/instaDelay"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:hint="Instagram Delay"
         android:layout_marginTop="20dp"
+        android:hint="Instagram Delay"
         android:inputType="number" />
+
     <CheckBox
         android:id="@+id/instaEnabled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enabled"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:text="Enabled" />
+
     <Button
         android:id="@+id/instaSave"
         android:layout_width="wrap_content"
